@@ -135,24 +135,27 @@ body {
     letter-spacing: -0.05em;
     margin-bottom: 1rem;
     position: relative;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    user-select: none;
-    white-space: nowrap;
+    display: inline-block;
+    color: #ffffff;
+    text-shadow: 
+        0 0 30px rgba(255, 255, 255, 0.5),
+        0 0 60px rgba(96, 165, 250, 0.3);
 }
 
-.hero-title .char {
+/* Blur Text Animation */
+.blur-text {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.2em;
+}
+
+.blur-text .char {
     display: inline-block;
-    font-family: 'Inter', sans-serif;
-    font-weight: 900;
-    color: #ffffff;
-    transition: all 0.1s ease;
-    text-shadow: 
-        0 0 20px rgba(255, 255, 255, 0.8),
-        0 0 40px rgba(96, 165, 250, 0.6),
-        0 0 60px rgba(167, 139, 250, 0.4);
-    filter: drop-shadow(0 5px 15px rgba(59, 130, 246, 0.5));
+    opacity: 0;
+    filter: blur(10px);
+    transform: translateY(-30px);
+    will-change: transform, filter, opacity;
 }
 
 .hero-subtitle {
@@ -320,12 +323,30 @@ section {
     text-align: center;
 }
 
+.scroll-reveal-container {
+    perspective: 1000px;
+}
+
 .about-text {
     font-size: clamp(1.125rem, 2vw, 1.5rem);
     line-height: 1.8;
     color: #d4d4d8;
     max-width: 900px;
     margin: 0 auto;
+}
+
+/* Scroll Reveal Text Effect */
+.scroll-reveal-text {
+    transform-origin: 0% 50%;
+    opacity: 0.1;
+}
+
+.scroll-reveal-text .word {
+    display: inline-block;
+    opacity: 0.1;
+    filter: blur(4px);
+    transition: opacity 0.3s ease, filter 0.3s ease;
+    will-change: opacity, filter;
 }
 
 /* ================================

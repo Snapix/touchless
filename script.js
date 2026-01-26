@@ -1,92 +1,97 @@
 // ================================
-// TEXT PRESSURE EFFECT
+// BLUR TEXT ANIMATION (Hero Title)
 // ================================
-const pressureText = document.getElementById('pressureText');
-const chars = pressureText ? pressureText.querySelectorAll('.char') : [];
+const blurTextElement = document.querySelector('.blur-text');
 
-let textMouse = { x: 0, y: 0 };
-let textCursor = { x: 0, y: 0 };
-
-if (chars.length > 0) {
-    // Initialize character positions
-    setTimeout(() => {
-        chars.forEach((char, i) => {
-            char.style.opacity = '0';
-            char.style.transform = 'translateY(20px)';
-            
-            setTimeout(() => {
-                char.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
-                char.style.opacity = '1';
-                char.style.transform = 'translateY(0)';
-            }, 400 + i * 50);
-        });
-    }, 100);
-
-    // Calculate distance between two points
-    const calcDist = (a, b) => {
-        const dx = b.x - a.x;
-        const dy = b.y - a.y;
-        return Math.sqrt(dx * dx + dy * dy);
-    };
-
-    // Get attribute value based on distance
-    const getCharAttr = (distance, maxDist, minVal, maxVal) => {
-        const val = maxVal - Math.abs((maxVal * distance) / maxDist);
-        return Math.max(minVal, val + minVal);
-    };
-
-    // Animate text pressure effect
-    function animateTextPressure() {
-        textMouse.x += (textCursor.x - textMouse.x) / 12;
-        textMouse.y += (textCursor.y - textMouse.y) / 12;
-
-        if (pressureText) {
-            const titleRect = pressureText.getBoundingClientRect();
-            const maxDist = titleRect.width / 2;
-
-            chars.forEach(char => {
-                const rect = char.getBoundingClientRect();
-                const charCenter = {
-                    x: rect.x + rect.width / 2,
-                    y: rect.y + rect.height / 2
-                };
-
-                const distance = calcDist(textMouse, charCenter);
-                
-                // Calculate font weight based on distance (closer = bolder)
-                const weight = Math.floor(getCharAttr(distance, maxDist, 100, 900));
-                
-                // Calculate scale based on distance (closer = bigger)
-                const scale = getCharAttr(distance, maxDist, 1, 1.3).toFixed(2);
-                
-                // Calculate glow intensity
-                const glowIntensity = getCharAttr(distance, maxDist, 0.3, 1).toFixed(2);
-
-                char.style.fontWeight = weight;
-                char.style.transform = `scale(${scale})`;
-                char.style.textShadow = `
-                    0 0 ${20 * glowIntensity}px rgba(255, 255, 255, ${0.8 * glowIntensity}),
-                    0 0 ${40 * glowIntensity}px rgba(96, 165, 250, ${0.6 * glowIntensity}),
-                    0 0 ${60 * glowIntensity}px rgba(167, 139, 250, ${0.4 * glowIntensity})
-                `;
-            });
-        }
-
-        requestAnimationFrame(animateTextPressure);
-    }
-
-    // Update cursor position for text effect
-    document.addEventListener('mousemove', (e) => {
-        textCursor.x = e.clientX;
-        textCursor.y = e.clientY;
+if (blurTextElement) {
+    const text = blurTextElement.getAttribute('data-text') || blurTextElement.textContent;
+    const chars = text.split('');
+    
+    // Clear and rebuild with spans
+    blurTextElement.textContent = '';
+    
+    chars.forEach((char, index) => {
+        const span = document.createElement('span');
+        span.className = 'char';
+        span.textContent = char === ' ' ? '\u00A0' : char;
+        blurTextElement.appendChild(span);
+        
+        // Staggered animation
+        setTimeout(() => {
+            span.style.transition = 'all 0.6s cubic-bezier(0.22, 1, 0.36, 1)';
+            span.style.opacity = '1';
+            span.style.filter = 'blur(0px)';
+            span.style.transform = 'translateY(0)';
+        }, 400 + index * 50);
     });
+}
 
-    // Initialize position to center
-    const titleRect = pressureText.getBoundingClientRect();
-    textMouse.x = textCursor.x = titleRect.left + titleRect.width / 2;
-    textMouse.y = textCursor.y = titleRect.top + titleRect.height / 2;
+// ================================
+// SCROLL REVEAL TEXT (About Section)
+// ================================
+const scrollRevealText = document.querySelector('.scroll-reveal-text');
 
-    animateTextPressure();
+if (scrollRevealText) {
+    const text = scrollRevealText.textContent;
+    const words = text.split(/(\s+)/);
+    
+    scrollRevealText.textContent = '';
+    
+    words.forEach((word, index) => {
+        if (word.match(/^\s+$/)) {
+            scrollRevealText.appendChild(document.createTextNode(word));
+        } else {
+            const span = document.createElement('span');
+            span.className = 'word';
+            span.textContent = word;
+            scrollRevealText.appendChild(span);
+        }
+    });
+    
+    const wordElements = scrollRevealText.querySelectorAll('.word');
+    
+    // Scroll-triggered animation
+    const animateWords = () => {
+        const rect = scrollRevealText.getBoundingClientRect();
+        const windowHeight = window.innerHeight;
+        
+        // Calculate scroll progress
+        const scrollProgress = Math.max(0, Math.min(1, 
+            (windowHeight - rect.top) / (windowHeight * 0.8)
+        ));
+        
+        // Rotation effect on container
+        const rotation = 3 - (scrollProgress * 3);
+        scrollRevealText.parentElement.style.transform = `rotate(${rotation}deg)`;
+        
+        // Animate each word based on scroll
+        wordElements.forEach((word, index) => {
+            const wordProgress = Math.max(0, Math.min(1, 
+                scrollProgress * wordElements.length - index
+            ));
+            
+            const opacity = 0.1 + (wordProgress * 0.9);
+            const blur = 4 - (wordProgress * 4);
+            
+            word.style.opacity = opacity;
+            word.style.filter = `blur(${blur}px)`;
+        });
+    };
+    
+    // Throttled scroll handler
+    let ticking = false;
+    const handleScroll = () => {
+        if (!ticking) {
+            window.requestAnimationFrame(() => {
+                animateWords();
+                ticking = false;
+            });
+            ticking = true;
+        }
+    };
+    
+    window.addEventListener('scroll', handleScroll);
+    animateWords(); // Initial call
 }
 
 // ================================

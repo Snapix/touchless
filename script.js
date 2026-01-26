@@ -1,4 +1,95 @@
 // ================================
+// TEXT PRESSURE EFFECT
+// ================================
+const pressureText = document.getElementById('pressureText');
+const chars = pressureText ? pressureText.querySelectorAll('.char') : [];
+
+let textMouse = { x: 0, y: 0 };
+let textCursor = { x: 0, y: 0 };
+
+if (chars.length > 0) {
+    // Initialize character positions
+    setTimeout(() => {
+        chars.forEach((char, i) => {
+            char.style.opacity = '0';
+            char.style.transform = 'translateY(20px)';
+            
+            setTimeout(() => {
+                char.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+                char.style.opacity = '1';
+                char.style.transform = 'translateY(0)';
+            }, 400 + i * 50);
+        });
+    }, 100);
+
+    // Calculate distance between two points
+    const calcDist = (a, b) => {
+        const dx = b.x - a.x;
+        const dy = b.y - a.y;
+        return Math.sqrt(dx * dx + dy * dy);
+    };
+
+    // Get attribute value based on distance
+    const getCharAttr = (distance, maxDist, minVal, maxVal) => {
+        const val = maxVal - Math.abs((maxVal * distance) / maxDist);
+        return Math.max(minVal, val + minVal);
+    };
+
+    // Animate text pressure effect
+    function animateTextPressure() {
+        textMouse.x += (textCursor.x - textMouse.x) / 12;
+        textMouse.y += (textCursor.y - textMouse.y) / 12;
+
+        if (pressureText) {
+            const titleRect = pressureText.getBoundingClientRect();
+            const maxDist = titleRect.width / 2;
+
+            chars.forEach(char => {
+                const rect = char.getBoundingClientRect();
+                const charCenter = {
+                    x: rect.x + rect.width / 2,
+                    y: rect.y + rect.height / 2
+                };
+
+                const distance = calcDist(textMouse, charCenter);
+                
+                // Calculate font weight based on distance (closer = bolder)
+                const weight = Math.floor(getCharAttr(distance, maxDist, 100, 900));
+                
+                // Calculate scale based on distance (closer = bigger)
+                const scale = getCharAttr(distance, maxDist, 1, 1.3).toFixed(2);
+                
+                // Calculate glow intensity
+                const glowIntensity = getCharAttr(distance, maxDist, 0.3, 1).toFixed(2);
+
+                char.style.fontWeight = weight;
+                char.style.transform = `scale(${scale})`;
+                char.style.textShadow = `
+                    0 0 ${20 * glowIntensity}px rgba(255, 255, 255, ${0.8 * glowIntensity}),
+                    0 0 ${40 * glowIntensity}px rgba(96, 165, 250, ${0.6 * glowIntensity}),
+                    0 0 ${60 * glowIntensity}px rgba(167, 139, 250, ${0.4 * glowIntensity})
+                `;
+            });
+        }
+
+        requestAnimationFrame(animateTextPressure);
+    }
+
+    // Update cursor position for text effect
+    document.addEventListener('mousemove', (e) => {
+        textCursor.x = e.clientX;
+        textCursor.y = e.clientY;
+    });
+
+    // Initialize position to center
+    const titleRect = pressureText.getBoundingClientRect();
+    textMouse.x = textCursor.x = titleRect.left + titleRect.width / 2;
+    textMouse.y = textCursor.y = titleRect.top + titleRect.height / 2;
+
+    animateTextPressure();
+}
+
+// ================================
 // CUSTOM CURSOR
 // ================================
 const cursorDot = document.querySelector('.cursor-dot');

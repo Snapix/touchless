@@ -4,310 +4,229 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>TouchlessTouch — Control Your PC Without Touching It</title>
-  <meta name="description" content="Precision desktop control powered by camera-based intelligent tracking. Control your PC without touching it." />
+  <meta name="description" content="Precision desktop control powered by camera-based intelligent tracking." />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
 
-  <!-- Ambient cursor light -->
-  <div class="cursor-glow" id="cursorGlow"></div>
+  <!-- Custom cursor rings (desktop) -->
+  <div class="cur-outer" id="curOuter"></div>
+  <div class="cur-inner" id="curInner"></div>
 
-  <!-- Canvas for particles -->
+  <!-- Click spark canvas -->
+  <canvas id="sparkCanvas"></canvas>
+
+  <!-- Floating lines background canvas (WebGL) -->
+  <canvas id="linesCanvas"></canvas>
+
+  <!-- Particle canvas -->
   <canvas id="bgCanvas"></canvas>
 
-  <!-- ─── HERO ──────────────────────────────────────── -->
+  <!-- INTRO TITLE OVERLAY -->
+  <div class="intro-overlay" id="introOverlay">
+    <div class="intro-content">
+      <div class="intro-title" id="introTitle">
+        <span class="iw">Touchless</span><span class="iw ia">Touch</span>
+      </div>
+      <div class="intro-sub" id="introSub">Control your PC without touching it</div>
+      <div class="intro-progress">
+        <div class="intro-bar" id="introBar"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- HERO -->
   <section class="hero" id="hero">
-    <div class="hero-bg-mesh"></div>
-    <div class="hero-grid-overlay"></div>
-
+    <div class="hero-mesh"></div>
+    <div class="hero-grid"></div>
     <div class="hero-inner">
-      <!-- Left: Text -->
-      <div class="hero-text" id="heroText">
-        <div class="badge reveal-up delay-0">
-          <span class="badge-dot"></span>
-          Alpha · Free to Use
-        </div>
-
-        <h1 class="hero-heading reveal-up delay-1">
-          <span class="word">Touchless</span><br />
-          <span class="word accent-word">Touch</span>
-        </h1>
-
-        <p class="hero-sub reveal-up delay-2">
-          Control your PC without touching it
-        </p>
-
-        <p class="hero-micro reveal-up delay-3">
-          Precision desktop control powered by camera-based intelligent tracking
-        </p>
-
-        <div class="hero-buttons reveal-up delay-4">
-          <a href="https://github.com/Snapix/TouchlessTouch/releases" class="btn btn-primary" target="_blank" rel="noopener">
-            <span class="btn-shine"></span>
+      <div class="hero-text">
+        <div class="badge reveal-up d0"><span class="bdot"></span>Alpha · Free to Use</div>
+        <h1 class="hero-h reveal-up d1"><span>Touchless</span><br/><span class="ac">Touch</span></h1>
+        <p class="hero-sub reveal-up d2">Control your PC without touching it</p>
+        <p class="hero-micro reveal-up d3">Precision desktop control powered by camera-based intelligent tracking</p>
+        <div class="hero-btns reveal-up d4">
+          <a href="https://github.com/Snapix/TouchlessTouch/releases" class="btn bp" target="_blank" rel="noopener">
+            <span class="bshine"></span>
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
             Download for Windows 10 / 11
           </a>
-          <a href="https://github.com/Snapix/TouchlessTouch/releases" class="btn btn-ghost" target="_blank" rel="noopener">
+          <a href="https://github.com/Snapix/TouchlessTouch/releases" class="btn bg" target="_blank" rel="noopener">
             <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.3 3.438 9.8 8.205 11.387.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 21.795 24 17.295 24 12c0-6.63-5.37-12-12-12"/></svg>
             GitHub Releases
           </a>
         </div>
-
-        <p class="sys-req reveal-up delay-5">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+        <p class="sysreq reveal-up d5">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
           Requires .NET 10 Runtime
         </p>
       </div>
 
-      <!-- Right: Abstract visual -->
-      <div class="hero-visual" id="heroVisual">
-        <div class="vis-container">
-          <div class="vis-ring vis-ring-1"></div>
-          <div class="vis-ring vis-ring-2"></div>
-          <div class="vis-ring vis-ring-3"></div>
-          <div class="vis-core">
-            <div class="vis-core-inner"></div>
-            <div class="vis-pulse"></div>
-          </div>
-          <div class="vis-orbit vis-orbit-1">
-            <div class="vis-dot vis-dot-green"></div>
-          </div>
-          <div class="vis-orbit vis-orbit-2">
-            <div class="vis-dot vis-dot-blue"></div>
-          </div>
-          <canvas id="visCanvas" width="420" height="420"></canvas>
-        </div>
-        <div class="vis-label vis-label-1">Cursor Zone</div>
-        <div class="vis-label vis-label-2">Click Zone</div>
-        <div class="vis-lines">
-          <svg viewBox="0 0 420 420" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <line x1="0" y1="105" x2="420" y2="105" stroke="rgba(59,130,246,0.12)" stroke-width="1"/>
-            <line x1="0" y1="210" x2="420" y2="210" stroke="rgba(59,130,246,0.12)" stroke-width="1"/>
-            <line x1="0" y1="315" x2="420" y2="315" stroke="rgba(59,130,246,0.12)" stroke-width="1"/>
-            <line x1="105" y1="0" x2="105" y2="420" stroke="rgba(59,130,246,0.12)" stroke-width="1"/>
-            <line x1="210" y1="0" x2="210" y2="420" stroke="rgba(59,130,246,0.12)" stroke-width="1"/>
-            <line x1="315" y1="0" x2="315" y2="420" stroke="rgba(59,130,246,0.12)" stroke-width="1"/>
-          </svg>
+      <div class="hero-vis reveal-up d2" id="heroVis">
+        <div class="vis-frame">
+          <div class="vis-orb"></div>
+          <div class="vis-ring vr1"></div>
+          <div class="vis-ring vr2"></div>
+          <div class="vis-ring vr3"></div>
+          <div class="vis-ring vr4"></div>
+          <div class="vis-hline vhl1"></div>
+          <div class="vis-hline vhl2"></div>
+          <div class="vis-hline vhl3"></div>
+          <div class="vis-corner vc-tl"></div>
+          <div class="vis-corner vc-tr"></div>
+          <div class="vis-corner vc-bl"></div>
+          <div class="vis-corner vc-br"></div>
+          <div class="vis-chip vchip1"><span>CURSOR</span><em>ACTIVE</em></div>
+          <div class="vis-chip vchip2"><span>LATENCY</span><em>~12ms</em></div>
+          <div class="vis-chip vchip3"><span>MODE</span><em>HSV</em></div>
         </div>
       </div>
     </div>
-
-    <div class="hero-scroll-hint">
-      <div class="scroll-line"></div>
-      <span>scroll</span>
-    </div>
+    <div class="scroll-hint"><div class="shl"></div><span>scroll</span></div>
   </section>
 
-  <!-- ─── HOW IT WORKS ──────────────────────────────── -->
-  <section class="how-it-works section-pad" id="howItWorks">
-    <div class="section-glow section-glow-left"></div>
+  <!-- HOW IT WORKS -->
+  <section class="hiw section-pad" id="howItWorks">
+    <div class="sglow sg-left"></div>
     <div class="container">
-      <div class="section-header reveal-up">
-        <div class="label-tag">How It Works</div>
-        <h2 class="section-title">Precision without contact</h2>
-        <p class="section-desc">A seamless system that bridges the physical and digital with nothing but a camera.</p>
+      <div class="sh reveal-up">
+        <div class="ltag">How It Works</div>
+        <h2 class="stitle">Precision without contact</h2>
+        <p class="sdesc">A seamless system that bridges physical and digital — nothing but a webcam and two green rings.</p>
       </div>
-
       <div class="steps-grid">
-        <div class="step-card reveal-side delay-0" data-step="01">
-          <div class="step-icon">
-            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="3"/><path d="M12 1v3M12 20v3M4.22 4.22l2.12 2.12M17.66 17.66l2.12 2.12M1 12h3M20 12h3M4.22 19.78l2.12-2.12M17.66 6.34l2.12-2.12"/></svg>
-          </div>
+        <div class="step-card reveal-side d0" data-n="01">
+          <div class="si"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="3"/><path d="M12 1v3M12 20v3M4.22 4.22l2.12 2.12M17.66 17.66l2.12 2.12M1 12h3M20 12h3M4.22 19.78l2.12-2.12M17.66 6.34l2.12-2.12"/></svg></div>
           <h3>Camera Calibration</h3>
           <p>Position your webcam facing the screen. TouchlessTouch initializes an intelligent visual field and prepares the tracking pipeline in seconds.</p>
         </div>
-
-        <div class="step-card reveal-side delay-1" data-step="02">
-          <div class="step-icon">
-            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
-          </div>
+        <div class="step-card reveal-side d1" data-n="02">
+          <div class="si"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg></div>
           <h3>4-Point Screen Mapping</h3>
-          <p>Tap each corner of your display once. The system creates a precise spatial grid — mapping every pixel of your screen into the camera's perspective.</p>
+          <p>Tap each corner of your display once. The system builds a precise spatial grid mapping every pixel into the camera's perspective.</p>
         </div>
-
-        <div class="step-card reveal-side delay-2" data-step="03">
-          <div class="step-icon">
-            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="3" fill="currentColor" opacity=".3"/><path d="M12 2v4M12 18v4M2 12h4M18 12h4"/></svg>
-          </div>
-          <h3>Cursor Control</h3>
-          <p>Wear a small green ring on your right-hand index finger. Its position within the calibrated zone translates directly into smooth, lag-free cursor movement.</p>
+        <div class="step-card reveal-side d2" data-n="03">
+          <div class="si"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="3" fill="currentColor" opacity=".25"/><path d="M12 2v4M12 18v4M2 12h4M18 12h4"/></svg></div>
+          <h3>Cursor Control Ring</h3>
+          <p>Wear a small green ring on your right index finger. Its position inside the calibrated zone translates directly into smooth cursor movement.</p>
         </div>
-
-        <div class="step-card reveal-side delay-3" data-step="04">
-          <div class="step-icon">
-            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M9 12l2 2 4-4"/><path d="M21 12c-1 0-3-1-3-3s2-3 3-3 3 1 3 3-2 3-3 3"/><path d="M3 12c1 0 3-1 3-3S4 6 3 6 0 7 0 9s2 3 3 3"/><path d="M12 21c0-1-1-3-3-3s-3 2-3 3 1 3 3 3 3-2 3-3"/><path d="M12 3c0 1-1 3-3 3S6 4 6 3s1-3 3-3 3 2 3 3"/></svg>
-          </div>
+        <div class="step-card reveal-side d3" data-n="04">
+          <div class="si"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M9 12l2 2 4-4"/><circle cx="12" cy="12" r="10"/></svg></div>
           <h3>Smart Click Detection</h3>
-          <p>A green ring on the left hand acts as the click trigger. Extend it outside the active zone to fire a click or hold it for drag operations — naturally and intuitively.</p>
+          <p>A green ring on the left hand acts as click trigger. Move it outside the active zone to click or hold it for drag operations — natural and instant.</p>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- ─── FEATURES ──────────────────────────────────── -->
+  <!-- FEATURES -->
   <section class="features section-pad" id="features">
-    <div class="section-glow section-glow-right"></div>
+    <div class="sglow sg-right"></div>
     <div class="container">
-      <div class="section-header reveal-up">
-        <div class="label-tag">Features</div>
-        <h2 class="section-title">Built different</h2>
+      <div class="sh reveal-up">
+        <div class="ltag">Features</div>
+        <h2 class="stitle">Built different</h2>
       </div>
-
-      <div class="features-grid">
-        <div class="feat-card reveal-scale delay-0">
-          <div class="feat-card-glow"></div>
-          <div class="feat-icon">
-            <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M5 9l-3 3 3 3"/><path d="M9 5l3-3 3 3"/><path d="M15 19l3-3-3-3"/><path d="M19 9l3 3-3 3"/><line x1="2" y1="12" x2="22" y2="12" stroke-dasharray="3 3"/><line x1="12" y1="2" x2="12" y2="22" stroke-dasharray="3 3"/></svg>
-          </div>
-          <h3>Touchless Cursor Control</h3>
-          <p>Direct your cursor using natural finger position. No physical surface required — pure spatial input.</p>
-        </div>
-
-        <div class="feat-card reveal-scale delay-1">
-          <div class="feat-card-glow"></div>
-          <div class="feat-icon">
-            <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
-          </div>
-          <h3>Smooth Responsive Tracking</h3>
-          <p>HSV-tuned color detection delivers fluid, low-latency tracking that keeps pace with natural movement.</p>
-        </div>
-
-        <div class="feat-card reveal-scale delay-2">
-          <div class="feat-card-glow"></div>
-          <div class="feat-icon">
-            <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
-          </div>
-          <h3>Lightweight Performance</h3>
-          <p>Engineered to be minimal on resources. Runs quietly in the background without slowing your system.</p>
-        </div>
-
-        <div class="feat-card reveal-scale delay-3">
-          <div class="feat-card-glow"></div>
-          <div class="feat-icon">
-            <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/><path d="M9 10h6M7 7h2M15 7h2"/></svg>
-          </div>
-          <h3>Windows 10 & 11 Native</h3>
-          <p>Designed specifically for modern Windows. Feels like a native OS feature — because it's built for it.</p>
-        </div>
-
-        <div class="feat-card reveal-scale delay-4">
-          <div class="feat-card-glow"></div>
-          <div class="feat-icon">
-            <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
-          </div>
-          <h3>Accessibility-Focused</h3>
-          <p>Designed to assist those with limited mobility. Technology that adapts to people, not the other way around.</p>
-        </div>
+      <div class="feat-grid">
+        <div class="fc reveal-scale d0"><div class="fcg"></div><div class="fi"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M5 9l-3 3 3 3M9 5l3-3 3 3M15 19l3-3-3-3M19 9l3 3-3 3"/></svg></div><h3>Touchless Cursor Control</h3><p>Direct your cursor with pure spatial input. No physical surface — no limits.</p></div>
+        <div class="fc reveal-scale d1"><div class="fcg"></div><div class="fi"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg></div><h3>Smooth Responsive Tracking</h3><p>HSV-tuned color detection delivers fluid, low-latency tracking that keeps pace with you.</p></div>
+        <div class="fc reveal-scale d2"><div class="fcg"></div><div class="fi"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg></div><h3>Lightweight Performance</h3><p>Engineered to be minimal on resources. Runs quietly without slowing your system.</p></div>
+        <div class="fc reveal-scale d3"><div class="fcg"></div><div class="fi"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg></div><h3>Windows 10 &amp; 11 Native</h3><p>Designed for modern Windows. Feels like a native OS feature — because it's built for it.</p></div>
+        <div class="fc reveal-scale d4"><div class="fcg"></div><div class="fi"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg></div><h3>Accessibility-Focused</h3><p>Technology that adapts to people. Built to assist those with limited mobility.</p></div>
       </div>
     </div>
   </section>
 
-  <!-- ─── CREATOR ────────────────────────────────────── -->
+  <!-- CREATOR -->
   <section class="creator section-pad" id="creator">
+    <div class="sglow sg-left"></div>
     <div class="container">
       <div class="creator-card reveal-up">
-        <div class="creator-bg-blur"></div>
-        <div class="creator-avatar-wrap">
-          <div class="creator-avatar-ring"></div>
-          <div class="creator-avatar-pulse"></div>
-          <img src="profile.jpeg" alt="OKSnappy" class="creator-avatar" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'" />
-          <div class="creator-avatar-fallback">
-            <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+        <div class="cc-blur"></div>
+        <div class="cc-avatar-wrap" id="avatarWrap">
+          <div class="cc-ring-outer"></div>
+          <div class="cc-ring-inner"></div>
+          <div class="cc-pulse"></div>
+          <img src="profile.jpeg" alt="OKSnappy" class="cc-img" id="creatorImg" />
+          <div class="cc-fallback">
+            <svg width="52" height="52" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
           </div>
         </div>
-        <div class="creator-info">
-          <div class="label-tag">Creator</div>
-          <h2>Made by OKSnappy</h2>
-          <p>Built with innovation, precision, and passion</p>
-          <div class="creator-tags">
-            <span>Developer</span>
-            <span>Creator</span>
-            <span>Innovator</span>
+        <div class="cc-info">
+          <div class="ltag">Creator</div>
+          <h2 class="cc-name">OKSnappy</h2>
+          <p class="cc-role">Made with innovation, precision, and passion</p>
+          <p class="cc-bio">Developer with a passion for building things that push boundaries. Fluent in Python, C#, and C++, with deep expertise in AI systems, prompt engineering, and vibe coding. Crafts intelligent tools that blend cutting-edge machine learning with practical real-world impact — from computer vision apps to advanced AI-powered workflows.</p>
+          <div class="cc-tags">
+            <span>Python</span><span>C#</span><span>C++</span><span>AI Expert</span><span>Prompt Engineering</span><span>Vibe Coding</span>
           </div>
         </div>
-        <div class="creator-deco">
-          <div class="deco-ring deco-ring-1"></div>
-          <div class="deco-ring deco-ring-2"></div>
-        </div>
+        <div class="cc-deco"><div class="cd1"></div><div class="cd2"></div></div>
       </div>
     </div>
   </section>
 
-  <!-- ─── SOCIAL ─────────────────────────────────────── -->
-  <section class="social-section section-pad" id="social">
+  <!-- SOCIAL -->
+  <section class="social section-pad" id="social">
     <div class="container">
-      <div class="section-header reveal-up">
-        <div class="label-tag">Connect</div>
-        <h2 class="section-title">Stay in the loop</h2>
-      </div>
-      <div class="social-grid">
-        <a href="https://instagram.com/snapix_yt" class="social-card reveal-scale delay-0" target="_blank" rel="noopener">
-          <div class="social-card-glow" style="--sg: #e1306c"></div>
-          <svg class="social-icon" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 1 0 0 12.324 6.162 6.162 0 0 0 0-12.324zM12 16a4 4 0 1 1 0-8 4 4 0 0 1 0 8zm6.406-11.845a1.44 1.44 0 1 0 0 2.881 1.44 1.44 0 0 0 0-2.881z"/></svg>
-          <div class="social-text">
-            <span class="social-name">Instagram</span>
-            <span class="social-handle">@snapix_yt</span>
-          </div>
-          <svg class="social-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 17L17 7M17 7H7M17 7v10"/></svg>
+      <div class="sh reveal-up"><div class="ltag">Connect</div><h2 class="stitle">Stay in the loop</h2></div>
+      <div class="soc-grid">
+        <a href="https://instagram.com/snapix_yt" class="soc-card reveal-scale d0" target="_blank" rel="noopener">
+          <div class="scg" style="--sg:#e1306c"></div>
+          <svg class="soc-ico" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 1 0 0 12.324 6.162 6.162 0 0 0 0-12.324zM12 16a4 4 0 1 1 0-8 4 4 0 0 1 0 8zm6.406-11.845a1.44 1.44 0 1 0 0 2.881 1.44 1.44 0 0 0 0-2.881z"/></svg>
+          <div class="sot"><span class="son">Instagram</span><span class="soh">@snapix_yt</span></div>
+          <svg class="soa" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 17L17 7M17 7H7M17 7v10"/></svg>
         </a>
-
-        <a href="https://www.youtube.com/@snappy4yt" class="social-card reveal-scale delay-1" target="_blank" rel="noopener">
-          <div class="social-card-glow" style="--sg: #ff0000"></div>
-          <svg class="social-icon" viewBox="0 0 24 24" fill="currentColor"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
-          <div class="social-text">
-            <span class="social-name">YouTube</span>
-            <span class="social-handle">@snappy4yt</span>
-          </div>
-          <svg class="social-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 17L17 7M17 7H7M17 7v10"/></svg>
+        <a href="https://www.youtube.com/@snappy4yt" class="soc-card reveal-scale d1" target="_blank" rel="noopener">
+          <div class="scg" style="--sg:#ff0000"></div>
+          <svg class="soc-ico" viewBox="0 0 24 24" fill="currentColor"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
+          <div class="sot"><span class="son">YouTube</span><span class="soh">@snappy4yt</span></div>
+          <svg class="soa" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 17L17 7M17 7H7M17 7v10"/></svg>
         </a>
-
-        <a href="https://www.threads.com/@snapix_yt" class="social-card reveal-scale delay-2" target="_blank" rel="noopener">
-          <div class="social-card-glow" style="--sg: #ffffff"></div>
-          <svg class="social-icon" viewBox="0 0 192 192" fill="currentColor"><path d="M141.537 88.988a66.667 66.667 0 0 0-2.518-1.143c-1.482-27.307-16.403-42.94-41.457-43.1h-.34c-14.986 0-27.449 6.396-35.12 18.036l13.779 9.452c5.73-8.695 14.724-10.548 21.348-10.548h.23c8.248.053 14.474 2.452 18.502 7.13 2.932 3.405 4.893 8.11 5.864 14.05-7.314-1.244-15.224-1.626-23.68-1.14-23.82 1.371-39.134 15.264-38.105 34.568.522 9.792 5.4 18.216 13.735 23.719 7.047 4.652 16.124 6.927 25.557 6.412 12.458-.683 22.231-5.436 29.049-14.127 5.178-6.6 8.452-15.153 9.899-25.93 5.937 3.583 10.337 8.298 12.767 13.966 4.132 9.635 4.373 25.468-8.546 38.376-11.319 11.308-24.925 16.2-45.488 16.351-22.809-.169-40.06-7.484-51.275-21.742C91.021 146.302 87 127.005 87 96.001c0-31.003 4.021-50.301 13.245-64.371C111.46 17.371 128.711 10.056 151.52 9.887c22.976.17 40.86 7.518 53.164 21.836C212.033 44.498 216 63.831 216 96.001c0 32.169-3.967 51.502-11.316 64.278-12.304 14.318-30.188 21.666-53.164 21.836-23.81-.17-42.058-7.501-54.35-21.836C88.924 147.504 84.958 128.17 84.958 96.001c0-32.17 3.966-51.503 11.312-64.278 12.294-14.335 30.54-21.666 54.35-21.836Z"/></svg>
-          <div class="social-text">
-            <span class="social-name">Threads</span>
-            <span class="social-handle">@snapix_yt</span>
-          </div>
-          <svg class="social-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 17L17 7M17 7H7M17 7v10"/></svg>
+        <a href="https://www.threads.com/@snapix_yt" class="soc-card reveal-scale d2" target="_blank" rel="noopener">
+          <div class="scg" style="--sg:#aaaaff"></div>
+          <svg class="soc-ico" viewBox="0 0 192 192" fill="currentColor"><path d="M141.537 88.988a66.667 66.667 0 0 0-2.518-1.143c-1.482-27.307-16.403-42.94-41.457-43.1h-.34c-14.986 0-27.449 6.396-35.12 18.036l13.779 9.452c5.73-8.695 14.724-10.548 21.348-10.548h.23c8.248.053 14.474 2.452 18.502 7.13 2.932 3.405 4.893 8.11 5.864 14.05-7.314-1.244-15.224-1.626-23.68-1.14-23.82 1.371-39.134 15.264-38.105 34.568.522 9.792 5.4 18.216 13.735 23.719 7.047 4.652 16.124 6.927 25.557 6.412 12.458-.683 22.231-5.436 29.049-14.127 5.178-6.6 8.452-15.153 9.899-25.93 5.937 3.583 10.337 8.298 12.767 13.966 4.132 9.635 4.373 25.468-8.546 38.376-11.319 11.308-24.925 16.2-45.488 16.351-22.809-.169-40.06-7.484-51.275-21.742C91.021 146.302 87 127.005 87 96.001c0-31.003 4.021-50.301 13.245-64.371C111.46 17.371 128.711 10.056 151.52 9.887c22.976.17 40.86 7.518 53.164 21.836C212.033 44.498 216 63.831 216 96.001c0 32.169-3.967 51.502-11.316 64.278-12.304 14.318-30.188 21.666-53.164 21.836-23.81-.17-42.058-7.501-54.35-21.836C88.924 147.504 84.958 128.17 84.958 96.001c0-32.17 3.966-51.503 11.312-64.278 12.294-14.335 30.54-21.666 54.35-21.836Z"/></svg>
+          <div class="sot"><span class="son">Threads</span><span class="soh">@snapix_yt</span></div>
+          <svg class="soa" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 17L17 7M17 7H7M17 7v10"/></svg>
         </a>
       </div>
     </div>
   </section>
 
-  <!-- ─── DOWNLOAD CTA ───────────────────────────────── -->
-  <section class="download-cta section-pad" id="download">
-    <div class="cta-bg-mesh"></div>
+  <!-- DOWNLOAD CTA -->
+  <section class="dl-cta section-pad" id="download">
+    <div class="cta-mesh"></div>
     <div class="container">
-      <div class="cta-inner reveal-up">
-        <div class="cta-glow-top"></div>
-        <div class="label-tag">Get Started</div>
-        <h2 class="cta-heading">Ready to experience<br /><span class="accent-text">touchless control?</span></h2>
-        <div class="cta-buttons">
-          <a href="https://github.com/Snapix/TouchlessTouch/releases" class="btn btn-primary btn-large" target="_blank" rel="noopener">
-            <span class="btn-shine"></span>
+      <div class="cta-box reveal-up">
+        <div class="cta-gt"></div>
+        <div class="ltag">Get Started</div>
+        <h2 class="cta-h">Ready to experience<br/><span class="ac">touchless control?</span></h2>
+        <div class="cta-btns">
+          <a href="https://github.com/Snapix/TouchlessTouch/releases" class="btn bp blg" target="_blank" rel="noopener">
+            <span class="bshine"></span>
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
             Download TouchlessTouch
           </a>
-          <a href="https://dotnet.microsoft.com/en-us/download/dotnet/10.0" class="btn btn-ghost btn-large" target="_blank" rel="noopener">
+          <a href="https://dotnet.microsoft.com/en-us/download/dotnet/10.0" class="btn bg blg" target="_blank" rel="noopener">
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
             Download .NET 10 Runtime
           </a>
         </div>
-        <div class="cta-glow-bottom"></div>
+        <div class="cta-gb"></div>
       </div>
     </div>
   </section>
 
-  <!-- ─── FOOTER ─────────────────────────────────────── -->
+  <!-- FOOTER -->
   <footer class="footer">
     <div class="container">
-      <div class="footer-inner">
-        <span class="footer-logo">TouchlessTouch</span>
-        <span class="footer-love">Made with ❤️ Girish</span>
-        <span class="footer-copy">© 2025 OKSnappy</span>
+      <div class="footer-in">
+        <span class="flogo">TouchlessTouch</span>
+        <span class="flove">Made with ❤️ Girish</span>
+        <span class="fcopy">© 2025 OKSnappy</span>
       </div>
     </div>
   </footer>
